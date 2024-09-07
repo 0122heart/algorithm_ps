@@ -13,7 +13,9 @@ def calender(M, N, x, y) :
     if(M < x or N < y) :
         return -1
     
-    candidateOfx = [x + M * i for i in range(N + 1)]
+    # candidate of x = x + M * i(i = 0, 1, 2, 3, ... , N - 1)
+    # N <= i라면 어차피 mod 연산의 값이 동일함
+    candidateOfx = [x + M * i for i in range(N)]
 
     for tempX in candidateOfx : 
         if(tempX % N == y % N) :
