@@ -1,9 +1,3 @@
-lenofnum = int(input())
-summ = 0
-num = int(input())
-
-for i in range(lenofnum) :
-    summ += num%10
-    num //= 10
-
-print(summ)
+the_number_of_nums = int(input())
+nums = list(map(int, input()))
+print(sum(nums))
