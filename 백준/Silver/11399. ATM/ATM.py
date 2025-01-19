@@ -1,17 +1,24 @@
-def main() :
-    N = int(input())
-    Pi = list(map(int, input().split()))
+import sys
 
-    for i in range(1, N) :
-        for j in range(i) :
-            if(Pi[i] < Pi[j]) :
-                Pi = Pi[:j] + [Pi[i]] + Pi[j:i] + Pi[i + 1:]
-                break
+def insertion_sort():
+    for index in range(the_num_of_people):
+        now_time = times[index]
+        index -= 1
+        while 0 <= index and now_time < times[index]:
+            # 삽입할 요소보다 크면 뒤로 미루기
+            times[index + 1] = times[index]
+            index -= 1
+        times[index + 1] = now_time
 
-    total = 0
-    for i in range(N) :
-        total += sum(Pi[:i]) + Pi[i]
+def make_shortest_time():
+    for index in range(1, the_num_of_people):
+        times[index] += times[index - 1]
 
-    print(total)
+input = sys.stdin.readline
+the_num_of_people = int(input())
+times = list(map(int, input().split()))
 
-main()
+# 오름차순 정렬
+insertion_sort()
+make_shortest_time()
+print(sum(times))
