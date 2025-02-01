@@ -2,30 +2,39 @@ import sys
 from collections import deque
 
 def is_exist_path(start, end):
-    if dfs(start, end, set(), deque()):
+    if bfs(start, end):
         print(1, end = " ")
     else:
         print(0, end = " ")
 
-def dfs(start, end, visited, frontier):
-    for i in tuple(relation[start]):
-        if i not in visited and i not in frontier:
-            if i == end:
-                return True
-            visited.add(i)
-            frontier.append(i)
+def bfs(start, end):
+    visited = set()
+    frontier = deque()
 
-    if not frontier:    
-        return False
+    for i in list(relation[start]):
+        if i == end:
+            return True
+        visited.add(i)
+        frontier.append(i)
+
+    while frontier:
+        now = frontier.popleft()
+        for i in list(relation[now]):
+            if i not in visited and i not in frontier:
+                if i == end:
+                    return True
+                visited.add(i)
+                frontier.append(i)
     
-    return dfs(frontier.pop(), end, visited, frontier)
+    return False
 
 num_vertexes = int(input())
 relation = {i + 1 : set() for i in range(num_vertexes)}
 
 # 간선이 있는 관계 구축
 for i in range(1, num_vertexes + 1):
-    neighborhood = [index + 1 for index, value in enumerate(map(int, input().split())) if value]
+    neighborhood = list(map(int, input().split()))
+    neighborhood = [j + 1 for j in range(num_vertexes) if neighborhood[j]]
     for k in neighborhood:
         relation[i].add(k)
 
