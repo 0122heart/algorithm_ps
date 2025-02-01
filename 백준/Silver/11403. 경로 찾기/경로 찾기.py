@@ -29,14 +29,12 @@ def bfs(start, end):
     return False
 
 num_vertexes = int(input())
-relation = {i + 1 : set() for i in range(num_vertexes)}
+relation = {}
 
 # 간선이 있는 관계 구축
 for i in range(1, num_vertexes + 1):
-    neighborhood = list(map(int, input().split()))
-    neighborhood = [j + 1 for j in range(num_vertexes) if neighborhood[j]]
-    for k in neighborhood:
-        relation[i].add(k)
+    neighborhood = [index + 1 for index, value in enumerate(map(int, input().split())) if value]
+    relation[i] = neighborhood
 
 for i in range(1, num_vertexes + 1):
     for j in range(1, num_vertexes + 1):
