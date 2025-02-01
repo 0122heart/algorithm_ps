@@ -10,17 +10,15 @@ def is_exist_path(start, end):
 def dfs(start, end, visited, frontier):
     for i in tuple(relation[start]):
         if i not in visited and i not in frontier:
+            if i == end:
+                return True
             visited.add(i)
             frontier.append(i)
 
     if not frontier:    
         return False
-
-    now = frontier.pop()
-    if now == end:
-        return True
     
-    return dfs(now, end, visited, frontier)
+    return dfs(frontier.pop(), end, visited, frontier)
 
 num_vertexes = int(input())
 relation = {i + 1 : set() for i in range(num_vertexes)}
