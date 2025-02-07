@@ -6,11 +6,11 @@ int main()
 {
     ios::sync_with_stdio(0); cin.tie(0);
 
-    int start, end;
+    long long start, end;
     cin >> start >> end;
 
     if(start == end){
-        cout << 0;
+        cout << 0 << "\n";
         return 0;
     }
 
@@ -22,7 +22,7 @@ int main()
     cout << end - start - 1 << "\n";
 
     // 오름차순 출력
-    for(int i = start + 1; i < end; i++) cout << i << " ";
+    for(long long i = start + 1; i < end; i++) cout << i << " ";
 
     return 0;
 }
