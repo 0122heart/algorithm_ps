@@ -1,32 +1,25 @@
-// 17298
-
+// Authored by : haneulkimdev
+// Co-authored by : -
+// http://boj.kr/98a57090ad0b472f86492f495a362127
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int num_of_nums;
-stack<pair<int, int>> sequence;
-pair<int, int> index_and_input;
-vector<int> result;
-
-int main(){
-    cin >> num_of_nums;
-    result.resize(num_of_nums, -1);
-    int input;
-
-    for(int i = 0; i < num_of_nums; i++){
-        cin >> input;
-        index_and_input = {i, input};
-
-        while(!sequence.empty() && sequence.top().second < input){
-            result[sequence.top().first] = input;
-            sequence.pop();
-        }
-
-        sequence.push(index_and_input);
-    }
-
-    for(auto i : result) cout << i << " ";
-
-    return 0;
+int a[1000000];
+int ans[1000000];
+int main(void) {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  int n;
+  cin >> n;
+  for (int i = 0; i < n; i++) cin >> a[i];
+  stack<int> S;
+  for (int i = n - 1; i >= 0; i--) {
+    while (!S.empty() && S.top() <= a[i]) S.pop();
+    if (S.empty())
+      ans[i] = -1;
+    else
+      ans[i] = S.top();
+    S.push(a[i]);
+  }
+  for (int i = 0; i < n; i++) cout << ans[i] << ' ';
 }
