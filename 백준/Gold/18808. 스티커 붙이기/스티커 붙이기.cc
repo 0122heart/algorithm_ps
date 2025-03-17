@@ -1,74 +1,88 @@
-// Authored by : BaaaaaaaaaaarkingDog
-// Co-authored by : -
-// http://boj.kr/6a7f35306b1446b1b01b057263879295
+// 18808
+
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m, k;
-int note[42][42];
-int r, c;
-int paper[12][12];
+int num_of_rows, num_of_cols, num_of_stickers, row_of_stickers, col_of_stickers;
+int board[40][40];
+int sticker[10][10];
 
-// paper를 90도 회전하는 함수
-void rotate(){
-  int tmp[12][12];
-  
-  for(int i = 0; i < r; i++)
-    for(int j = 0; j < c; j++)
-      tmp[i][j] = paper[i][j];
-  
-  for(int i = 0; i < c; i++)
-    for(int j = 0; j < r; j++)
-      paper[i][j] = tmp[r-1-j][i];
+// 90도 회전하는 함수
+void rotate_quarter(int (&origin)[10][10]){
+    int temp[10][10];
+    for(int i = 0; i < row_of_stickers; i++)
+        for(int j = 0; j < col_of_stickers; j++)
+            temp[i][j] = origin[i][j];
 
-  swap(r, c);
-}
-
-// note의 (x,y)에 모눈종이의 (0,0)이 올라가게 스티커를 붙일 수 있는지 판단하는 함수. 가능할 경우 note를 갱신한 후 true를 반환.
-bool pastable(int x, int y){
-  for(int i = 0; i < r; i++){
-    for(int j = 0; j < c; j++){
-      if(note[x+i][y+j] == 1 && paper[i][j] == 1)
-        return false;
-    }
-  }
-  for(int i = 0; i < r; i++){
-    for(int j = 0; j < c; j++){
-      if(paper[i][j] == 1)
-        note[x+i][y+j] = 1;
-    }
-  }
-  return true;
-}
-
-int main(void) {
-  ios::sync_with_stdio(0);
-  cin.tie(0);
-  cin >> n >> m >> k;
-  while(k--){
-    cin >> r >> c;
-    for(int i = 0; i < r; i++)
-      for(int j = 0; j < c; j++)
-        cin >> paper[i][j];
-    
-    for(int rot = 0; rot < 4; rot++){
-      bool is_paste = false; // 해당 스티커를 붙였는가?
-      for(int x = 0; x <= n-r; x++){
-        if(is_paste) break;
-        for(int y = 0; y <= m-c; y++){
-          if(pastable(x, y)){
-            is_paste = true;
-            break;
-          }
+    for(int row = 0; row < row_of_stickers; row++){
+        for(int col = 0; col < col_of_stickers; col++){
+            origin[col][row_of_stickers - 1 - row] = temp[row][col];
         }
-      }
-      if(is_paste) break;
-      rotate();
     }
-  }
-  int cnt = 0;
-  for(int i = 0; i < n; i++)
-    for(int j = 0; j < m; j++)
-      cnt += note[i][j];
-  cout << cnt << '\n';
+}
+
+bool OOB(int row, int col){
+    return row < 0 || num_of_rows <= row || col < 0 || num_of_cols <= col;
+}
+
+void putting(int row, int col){
+    for(int i = 0; i < row_of_stickers; i++)
+        for(int j = 0; j < col_of_stickers; j++)
+            if(sticker[i][j])
+                board[i + row][j + col] = sticker[i][j];
+}
+
+// 스티커 붙일 수 있는지 체크
+bool can_put(int row, int col){
+    for(int i = 0; i < row_of_stickers; i++)
+        for(int j = 0; j < col_of_stickers; j++)
+            if(OOB(i + row, j + col) || sticker[i][j] + board[i + row][j + col] == 2)
+                return false;
+
+    putting(row, col);
+    return true;
+}
+
+
+// 스티커 붙이기
+void put_sticker(){
+    for(int rotation = 0; rotation < 4; rotation++){
+        for(int i = 0; i < num_of_rows; i++)
+            for(int j = 0; j < num_of_cols; j++)
+                if(can_put(i, j)) return;
+
+        rotate_quarter(sticker);
+        swap(row_of_stickers, col_of_stickers);
+    }
+}
+
+// 붙은 스티커 체크
+void check_put(){
+    int result = 0;
+    for(int i = 0; i < num_of_rows; i++){
+        for(int j = 0; j < num_of_cols; j++){
+            if(board[i][j]) result++;
+        }
+    }
+    cout << result;
+}
+
+int main(){
+    ios::sync_with_stdio(0); cin.tie(0);
+    cin >> num_of_rows >> num_of_cols >> num_of_stickers;
+
+    for(int i = 0; i < num_of_rows; i++)
+        fill(board[i], board[i] + num_of_cols, 0);
+
+    for(int i = 0; i < num_of_stickers; i++){
+        cin >> row_of_stickers >> col_of_stickers;
+        for(int j = 0; j < row_of_stickers; j++){
+            for(int k = 0; k < col_of_stickers; k++)
+                cin >> sticker[j][k];
+        }
+        put_sticker();
+    }
+
+    check_put();
+    return 0;
 }
