@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <string>
 using namespace std;
 
@@ -9,22 +10,29 @@ int main() {
     string original, boom;
     cin >> original >> boom;
 
-    string result;
-    int boom_len = boom.length();
+    vector<char> result;
+    int boom_len = boom.size();
 
     for (char c : original) {
         result.push_back(c);
 
-        // result의 마지막 부분이 boom과 일치하는지 확인
-        if (result.size() >= boom_len &&
-            result.substr(result.size() - boom_len, boom_len) == boom) {
-            // 폭발 문자열 발견 → 제거
-            result.erase(result.end() - boom_len, result.end());
+        if (result.size() >= boom_len) {
+            bool is_boom = true;
+            for (int i = 0; i < boom_len; ++i) {
+                if (result[result.size() - boom_len + i] != boom[i]) {
+                    is_boom = false;
+                    break;
+                }
+            }
+
+            if (is_boom) {
+                for (int i = 0; i < boom_len; ++i) result.pop_back();
+            }
         }
     }
 
     if (result.empty()) cout << "FRULA";
-    else cout << result;
+    else for (char c : result) cout << c;
 
     return 0;
 }
